@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
+
 <meta charset="UTF-8">
 
 <meta name="viewport"
@@ -9,7 +11,7 @@
                maximum-scale=5.0,
                user-scalable=yes">
 
-<title>Gerador de Certificados</title>
+<title>Gerador de Certificados QAPDMR</title>
 
 <style>
 
@@ -17,48 +19,40 @@
     box-sizing: border-box;
 }
 
-html,
 body {
     margin: 0;
-    padding: 0;
-    width: 100%;
-    min-height: 100%;
+    padding: 15px;
     font-family: Arial, sans-serif;
     background: #eeeeee;
-}
-
-body {
-    padding: 12px;
 }
 
 h1 {
     text-align: center;
     font-size: 22px;
-    margin: 5px 0 15px;
+    margin: 5px 0 15px 0;
 }
 
-.painel {
+#controles {
     width: 100%;
     max-width: 1000px;
-    margin: auto;
+    margin: 0 auto 15px auto;
     background: white;
     padding: 15px;
     border-radius: 10px;
-    box-shadow: 0 2px 8px rgba(0,0,0,.15);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
 }
 
 .campo {
-    margin-bottom: 12px;
+    margin-bottom: 10px;
 }
 
-label {
+.campo label {
     display: block;
     font-weight: bold;
-    margin-bottom: 5px;
+    margin-bottom: 4px;
 }
 
-input[type="text"],
-input[type="number"] {
+.campo input {
     width: 100%;
     padding: 10px;
     font-size: 16px;
@@ -66,54 +60,53 @@ input[type="number"] {
     border-radius: 6px;
 }
 
-input[type="color"] {
-    width: 55px;
-    height: 40px;
+.linha {
+    display: flex;
+    gap: 10px;
 }
 
-button {
+.linha .campo {
+    flex: 1;
+}
+
+#cor {
+    height: 45px;
+    padding: 3px;
+}
+
+#botao {
     width: 100%;
     padding: 13px;
-    border: 0;
-    border-radius: 7px;
-    background: #1976d2;
-    color: white;
+    margin-top: 5px;
     font-size: 17px;
     font-weight: bold;
+    color: white;
+    background: #1976d2;
+    border: none;
+    border-radius: 7px;
     cursor: pointer;
 }
 
-button:active {
-    transform: scale(.98);
-}
-
-.ajuda {
-    text-align: center;
-    color: #666;
-    font-size: 13px;
-    margin: 10px auto;
-    max-width: 1000px;
+#botao:hover {
+    background: #125da7;
 }
 
 #certificado {
     position: relative;
-
     width: 100%;
     max-width: 1000px;
-
     margin: 0 auto;
-
     aspect-ratio: 1000 / 707;
 
     background-image: url("certificado.jpg");
     background-size: 100% 100%;
     background-position: center;
     background-repeat: no-repeat;
-
     background-color: white;
 
     overflow: hidden;
 
+    /* Zoom com dois dedos */
     touch-action: pinch-zoom;
 }
 
@@ -126,9 +119,7 @@ button:active {
     transform: translate(-50%, -50%);
 
     font-weight: bold;
-
     white-space: nowrap;
-
     line-height: 1;
 
     user-select: none;
@@ -136,9 +127,7 @@ button:active {
 
     cursor: grab;
 
-    /*
-      Permite pinça no navegador.
-    */
+    /* Zoom com dois dedos */
     touch-action: pinch-zoom;
 }
 
@@ -153,11 +142,8 @@ button:active {
     bottom: 2%;
 
     font-weight: bold;
-
     white-space: nowrap;
-
     text-align: right;
-
     line-height: 1.1;
 
     user-select: none;
@@ -167,101 +153,102 @@ button:active {
 @media (max-width: 600px) {
 
     body {
-        padding: 7px;
-    }
-
-    .painel {
-        padding: 11px;
+        padding: 8px;
     }
 
     h1 {
-        font-size: 20px;
+        font-size: 19px;
     }
+
+    #controles {
+        padding: 10px;
+    }
+
+    .linha {
+        flex-direction: column;
+        gap: 0;
+    }
+
 }
 
 </style>
-</head>
 
+</head>
 
 <body>
 
-
 <h1>Gerador de Certificados</h1>
 
-
-<div class="painel">
-
+<div id="controles">
 
     <div class="campo">
-
-        <label for="nome">
-            Nome
-        </label>
+        <label for="nome">Nome:</label>
 
         <input
             type="text"
             id="nome"
-            placeholder="Digite o nome">
-
+            placeholder="Digite o nome"
+        >
     </div>
 
 
     <div class="campo">
 
         <label for="indicativo">
-            Indicativo
+            Indicativo:
         </label>
 
         <input
             type="text"
             id="indicativo"
-            placeholder="Digite o indicativo">
+            placeholder="Digite o indicativo"
+        >
 
     </div>
 
 
-    <div class="campo">
+    <div class="linha">
 
-        <label for="cor">
-            Cor do texto
-        </label>
+        <div class="campo">
 
-        <input
-            type="color"
-            id="cor"
-            value="#000000">
+            <label for="cor">
+                Cor:
+            </label>
+
+            <input
+                type="color"
+                id="cor"
+                value="#000000"
+            >
+
+        </div>
+
+
+        <div class="campo">
+
+            <label for="tamanho">
+                Tamanho:
+            </label>
+
+            <input
+                type="number"
+                id="tamanho"
+                value="52"
+                min="10"
+                max="150"
+            >
+
+        </div>
 
     </div>
 
 
-    <div class="campo">
-
-        <label for="tamanho">
-            Tamanho do texto
-        </label>
-
-        <input
-            type="number"
-            id="tamanho"
-            value="52"
-            min="10"
-            max="150">
-
-    </div>
-
-
-    <button onclick="baixarCertificado()">
-        Gerar certificado
+    <button
+        id="botao"
+        onclick="baixarCertificado()"
+    >
+        BAIXAR CERTIFICADO
     </button>
-
-</div>
-
-
-<div class="ajuda">
-
-    Toque e arraste o texto para posicioná-lo.
-    <br>
-    Use dois dedos para aumentar ou diminuir a tela.
 
 </div>
 
@@ -275,117 +262,76 @@ button:active {
 </div>
 
 
-
 <script>
 
 
 /*
-==================================================
-VARIÁVEIS
-==================================================
+========================================
+ELEMENTOS
+========================================
 */
 
-
-const certificado =
-    document.getElementById(
-        "certificado"
-    );
-
-
-const identificacao =
-    document.getElementById(
-        "identificacao"
-    );
-
-
-const rodape =
-    document.getElementById(
-        "rodape"
-    );
-
-
 const nomeInput =
-    document.getElementById(
-        "nome"
-    );
-
+    document.getElementById("nome");
 
 const indicativoInput =
-    document.getElementById(
-        "indicativo"
-    );
-
+    document.getElementById("indicativo");
 
 const corInput =
-    document.getElementById(
-        "cor"
-    );
-
+    document.getElementById("cor");
 
 const tamanhoInput =
-    document.getElementById(
-        "tamanho"
-    );
+    document.getElementById("tamanho");
+
+const identificacao =
+    document.getElementById("identificacao");
+
+const rodape =
+    document.getElementById("rodape");
+
+const certificado =
+    document.getElementById("certificado");
 
 
 /*
-==================================================
+========================================
 POSIÇÃO DO TEXTO
-==================================================
+========================================
 
-Trabalhamos sempre dentro de uma área
-de 1000 x 707.
+O certificado trabalha em uma área
+virtual de 1000 x 707.
 
-Assim, mesmo que o celular mude de tamanho,
-a posição continua correta.
+Isso permite que a posição seja
+proporcional em qualquer tela.
 */
 
-
 let posicaoX = 500;
-
 let posicaoY = 353.5;
 
 
 /*
-==================================================
-CONTROLE DO ARRASTE
-==================================================
+========================================
+DATA ATUAL
+========================================
 */
-
-
-let arrastando = false;
-
-let ponteiroAtivo = null;
-
-
-/*
-==================================================
-DATA AUTOMÁTICA
-==================================================
-*/
-
 
 function dataAtual() {
 
     const hoje =
         new Date();
 
-
     const dia =
         String(
             hoje.getDate()
         ).padStart(2, "0");
-
 
     const mes =
         String(
             hoje.getMonth() + 1
         ).padStart(2, "0");
 
-
     const ano =
         hoje.getFullYear();
-
 
     return (
         dia +
@@ -398,17 +344,16 @@ function dataAtual() {
 
 
 /*
-==================================================
-ATUALIZAÇÃO DO CERTIFICADO
-==================================================
+========================================
+ATUALIZAÇÃO DA TELA
+========================================
 */
-
 
 function atualizar() {
 
 
     /*
-      Indicativo sempre em maiúsculas.
+    Indicativo sempre em maiúsculo
     */
 
     indicativoInput.value =
@@ -418,14 +363,11 @@ function atualizar() {
     const nome =
         nomeInput.value.trim();
 
-
     const indicativo =
         indicativoInput.value.trim();
 
-
     const cor =
         corInput.value;
-
 
     const tamanho =
         Number(
@@ -434,49 +376,47 @@ function atualizar() {
 
 
     /*
-      Cor
+    Cor
     */
 
     identificacao.style.color =
         cor;
-
 
     rodape.style.color =
         cor;
 
 
     /*
-      Tamanho responsivo
+    ESCALA PROPORCIONAL
+
+    A largura virtual é 1000.
+
+    O navegador calcula automaticamente
+    a proporção de acordo com o tamanho
+    da tela.
     */
 
     const largura =
         certificado.clientWidth;
 
-
     const escala =
         largura / 1000;
 
 
+    /*
+    TAMANHO DO INDICATIVO/NOME PRINCIPAL
+    */
+
     identificacao.style.fontSize =
-        (tamanho * escala) +
-        "px";
+        (
+            tamanho *
+            escala
+        ) + "px";
 
 
     /*
-    ==============================================
-    REGRA PRINCIPAL
-    ==============================================
-
-    Nome + indicativo:
-    indicativo é o texto grande.
-
-    Somente indicativo:
-    indicativo é o texto grande.
-
-    Somente nome:
-    nome é o texto grande.
+    TEXTO PRINCIPAL
     */
-
 
     if (indicativo) {
 
@@ -501,26 +441,62 @@ function atualizar() {
 
 
     /*
-      RODAPÉ
+    RODAPÉ
     */
 
-    if (nome && indicativo) {
+    if (
+        nome &&
+        indicativo
+    ) {
+
+
+        /*
+        Quando existem Nome + Indicativo,
+        o nome e a data ficam menores.
+        */
 
         rodape.textContent =
             nome +
             " — Emitido em " +
             dataAtual();
 
+
+        rodape.style.fontSize =
+            (
+                tamanho *
+                escala *
+                0.17
+            ) + "px";
+
     }
 
     else {
+
+
+        /*
+        Somente indicativo ou somente nome.
+
+        Mantém o tamanho original.
+        */
 
         rodape.textContent =
             "Emitido em " +
             dataAtual();
 
+
+        rodape.style.fontSize =
+            (
+                tamanho *
+                escala *
+                0.28
+            ) + "px";
+
     }
 
+
+    /*
+    Mantém a posição proporcional.
+    */
 
     posicionarTexto();
 
@@ -528,11 +504,10 @@ function atualizar() {
 
 
 /*
-==================================================
+========================================
 POSICIONAR TEXTO
-==================================================
+========================================
 */
-
 
 function posicionarTexto() {
 
@@ -540,42 +515,42 @@ function posicionarTexto() {
     const largura =
         certificado.clientWidth;
 
-
     const altura =
         certificado.clientHeight;
 
-
-    const x =
-        (
-            posicaoX /
-            1000
-        ) *
-        largura;
-
-
-    const y =
-        (
-            posicaoY /
-            707
-        ) *
-        altura;
+    const escala =
+        largura / 1000;
 
 
     identificacao.style.left =
-        x + "px";
+        (
+            posicaoX *
+            escala
+        ) + "px";
 
 
     identificacao.style.top =
-        y + "px";
+        (
+            posicaoY *
+            escala
+        ) + "px";
 
 }
 
 
 /*
-==================================================
-ARRASTAR TEXTO
-==================================================
+========================================
+ARRASTAR COM DEDO OU MOUSE
+========================================
 */
+
+let arrastando = false;
+
+let inicioX = 0;
+let inicioY = 0;
+
+let inicioPosicaoX = 0;
+let inicioPosicaoY = 0;
 
 
 identificacao.addEventListener(
@@ -586,20 +561,23 @@ identificacao.addEventListener(
         arrastando = true;
 
 
-        ponteiroAtivo =
-            event.pointerId;
+        identificacao.setPointerCapture(
+            event.pointerId
+        );
 
 
-        try {
+        inicioX =
+            event.clientX;
 
-            identificacao.setPointerCapture(
-                event.pointerId
-            );
-
-        } catch(e) {}
+        inicioY =
+            event.clientY;
 
 
-        event.preventDefault();
+        inicioPosicaoX =
+            posicaoX;
+
+        inicioPosicaoY =
+            posicaoY;
 
     }
 );
@@ -611,74 +589,78 @@ identificacao.addEventListener(
 
 
         if (!arrastando) {
+
             return;
+
         }
 
 
-        if (
-            event.pointerId !==
-            ponteiroAtivo
-        ) {
-            return;
-        }
+        const largura =
+            certificado.clientWidth;
 
-
-        const rect =
-            certificado.getBoundingClientRect();
-
-
-        let x =
-            event.clientX -
-            rect.left;
-
-
-        let y =
-            event.clientY -
-            rect.top;
+        const altura =
+            certificado.clientHeight;
 
 
         /*
-          Não deixa sair do certificado.
+        Converte o movimento da tela
+        para a área virtual 1000 x 707.
         */
 
-        x =
-            Math.max(
-                0,
-                Math.min(
-                    rect.width,
-                    x
-                )
-            );
+        const escalaX =
+            1000 / largura;
+
+        const escalaY =
+            707 / altura;
 
 
-        y =
-            Math.max(
-                0,
-                Math.min(
-                    rect.height,
-                    y
-                )
-            );
+        const deslocamentoX =
+            (
+                event.clientX -
+                inicioX
+            ) * escalaX;
 
 
-        /*
-          Converte para 1000 x 707.
-        */
+        const deslocamentoY =
+            (
+                event.clientY -
+                inicioY
+            ) * escalaY;
+
 
         posicaoX =
-            (
-                x /
-                rect.width
-            ) *
-            1000;
+            inicioPosicaoX +
+            deslocamentoX;
 
 
         posicaoY =
-            (
-                y /
-                rect.height
-            ) *
-            707;
+            inicioPosicaoY +
+            deslocamentoY;
+
+
+        /*
+        Impede que o texto saia
+        completamente do certificado.
+        */
+
+        posicaoX =
+            Math.max(
+                0,
+                Math.min(
+                    1000,
+                    posicaoX
+                )
+            );
+
+
+        posicaoY =
+            Math.max(
+                0,
+                Math.min(
+                    707,
+                    posicaoY
+                )
+            );
 
 
         posicionarTexto();
@@ -687,59 +669,46 @@ identificacao.addEventListener(
 );
 
 
-function finalizarArraste(event) {
-
-
-    if (
-        event.pointerId ===
-        ponteiroAtivo
-    ) {
+identificacao.addEventListener(
+    "pointerup",
+    function() {
 
         arrastando = false;
 
-        ponteiroAtivo = null;
-
     }
-
-}
-
-
-identificacao.addEventListener(
-    "pointerup",
-    finalizarArraste
 );
 
 
 identificacao.addEventListener(
     "pointercancel",
-    finalizarArraste
+    function() {
+
+        arrastando = false;
+
+    }
 );
 
 
 /*
-==================================================
-CAMPOS
-==================================================
+========================================
+ATUALIZAÇÃO AUTOMÁTICA
+========================================
 */
-
 
 nomeInput.addEventListener(
     "input",
     atualizar
 );
 
-
 indicativoInput.addEventListener(
     "input",
     atualizar
 );
 
-
 corInput.addEventListener(
     "input",
     atualizar
 );
-
 
 tamanhoInput.addEventListener(
     "input",
@@ -748,28 +717,22 @@ tamanhoInput.addEventListener(
 
 
 /*
-==================================================
-REDIMENSIONAMENTO
-==================================================
+========================================
+QUANDO A TELA MUDA DE TAMANHO
+========================================
 */
-
 
 window.addEventListener(
     "resize",
-    function() {
-
-        atualizar();
-
-    }
+    atualizar
 );
 
 
 /*
-==================================================
-GERAR CERTIFICADO
-==================================================
+========================================
+BAIXAR CERTIFICADO
+========================================
 */
-
 
 function baixarCertificado() {
 
@@ -780,8 +743,8 @@ function baixarCertificado() {
 
     const indicativo =
         indicativoInput.value
-            .trim()
-            .toUpperCase();
+        .trim()
+        .toUpperCase();
 
 
     const cor =
@@ -795,7 +758,8 @@ function baixarCertificado() {
 
 
     /*
-      Cria a imagem final.
+    Cria imagem final
+    de 1000 x 707.
     */
 
     const canvas =
@@ -805,7 +769,6 @@ function baixarCertificado() {
 
 
     canvas.width = 1000;
-
     canvas.height = 707;
 
 
@@ -819,146 +782,181 @@ function baixarCertificado() {
         new Image();
 
 
+    /*
+    Carrega o certificado.
+    */
+
     fundo.onload =
         function() {
 
 
-            /*
-              Fundo
-            */
+        /*
+        Fundo
+        */
 
-            ctx.drawImage(
-                fundo,
-                0,
-                0,
-                1000,
-                707
-            );
-
-
-            /*
-              Texto principal
-            */
-
-            ctx.fillStyle =
-                cor;
+        ctx.drawImage(
+            fundo,
+            0,
+            0,
+            1000,
+            707
+        );
 
 
-            ctx.font =
-                "bold " +
-                tamanho +
-                "px Arial";
+        /*
+        COR
+        */
+
+        ctx.fillStyle =
+            cor;
 
 
-            ctx.textAlign =
-                "center";
+        /*
+        TEXTO PRINCIPAL
+        */
+
+        ctx.font =
+            "bold " +
+            tamanho +
+            "px Arial";
 
 
-            ctx.textBaseline =
-                "middle";
+        ctx.textAlign =
+            "center";
 
 
-            let textoPrincipal =
-                "";
+        ctx.textBaseline =
+            "middle";
 
 
-            if (indicativo) {
-
-                textoPrincipal =
-                    indicativo;
-
-            }
-
-            else if (nome) {
-
-                textoPrincipal =
-                    nome;
-
-            }
+        let textoPrincipal =
+            "";
 
 
-            if (textoPrincipal) {
+        if (indicativo) {
 
-                ctx.fillText(
-                    textoPrincipal,
-                    posicaoX,
-                    posicaoY
-                );
+            textoPrincipal =
+                indicativo;
 
-            }
+        }
 
+        else if (nome) {
 
-            /*
-              Rodapé
-            */
+            textoPrincipal =
+                nome;
 
-            ctx.textAlign =
-                "right";
+        }
 
 
-            ctx.textBaseline =
-                "bottom";
+        /*
+        Desenha o texto principal
+        */
 
-
-            const textoRodape =
-                nome
-                    ? nome +
-                      " — Emitido em " +
-                      dataAtual()
-
-                    : "Emitido em " +
-                      dataAtual();
-
-
-            const tamanhoRodape =
-                Math.max(
-                    14,
-                    tamanho * 0.28
-                );
-
-
-            ctx.font =
-                "bold " +
-                tamanhoRodape +
-                "px Arial";
-
+        if (textoPrincipal) {
 
             ctx.fillText(
-                textoRodape,
-                980,
-                687
+                textoPrincipal,
+                posicaoX,
+                posicaoY
+            );
+
+        }
+
+
+        /*
+        RODAPÉ
+        */
+
+        ctx.textAlign =
+            "right";
+
+
+        ctx.textBaseline =
+            "bottom";
+
+
+        const textoRodape =
+            nome
+                ? nome +
+                  " — Emitido em " +
+                  dataAtual()
+
+                : "Emitido em " +
+                  dataAtual();
+
+
+        /*
+        Tamanho do rodapé.
+
+        Nome + Indicativo:
+        17% do tamanho principal.
+
+        Outros casos:
+        28%, mantendo o comportamento
+        anterior.
+        */
+
+        const tamanhoRodape =
+            (
+                nome &&
+                indicativo
+            )
+
+                ? Math.max(
+                    12,
+                    tamanho * 0.17
+                  )
+
+                : Math.max(
+                    14,
+                    tamanho * 0.28
+                  );
+
+
+        ctx.font =
+            "bold " +
+            tamanhoRodape +
+            "px Arial";
+
+
+        /*
+        Posição do rodapé.
+        */
+
+        ctx.fillText(
+            textoRodape,
+            980,
+            687
+        );
+
+
+        /*
+        CRIA O DOWNLOAD
+        */
+
+        const link =
+            document.createElement(
+                "a"
             );
 
 
-            /*
-              Download
-            */
-
-            const link =
-                document.createElement(
-                    "a"
-                );
+        link.download =
+            "certificado.png";
 
 
-            link.download =
-                "certificado.png";
+        link.href =
+            canvas.toDataURL(
+                "image/png"
+            );
 
 
-            link.href =
-                canvas.toDataURL(
-                    "image/png"
-                );
+        link.click();
 
-
-            link.click();
-
-        };
+    };
 
 
     /*
-      Busca certificado.jpg
-      que estará no mesmo
-      repositório.
+    Nome do arquivo de fundo.
     */
 
     fundo.src =
@@ -968,16 +966,15 @@ function baixarCertificado() {
 
 
 /*
-==================================================
+========================================
 INICIALIZAÇÃO
-==================================================
+========================================
 */
 
-
 atualizar();
-
 
 </script>
 
 </body>
+
 </html>
