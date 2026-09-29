@@ -1,0 +1,983 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width,
+               initial-scale=1.0,
+               maximum-scale=5.0,
+               user-scalable=yes">
+
+<title>Gerador de Certificados</title>
+
+<style>
+
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    min-height: 100%;
+    font-family: Arial, sans-serif;
+    background: #eeeeee;
+}
+
+body {
+    padding: 12px;
+}
+
+h1 {
+    text-align: center;
+    font-size: 22px;
+    margin: 5px 0 15px;
+}
+
+.painel {
+    width: 100%;
+    max-width: 1000px;
+    margin: auto;
+    background: white;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,.15);
+}
+
+.campo {
+    margin-bottom: 12px;
+}
+
+label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+input[type="text"],
+input[type="number"] {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #aaa;
+    border-radius: 6px;
+}
+
+input[type="color"] {
+    width: 55px;
+    height: 40px;
+}
+
+button {
+    width: 100%;
+    padding: 13px;
+    border: 0;
+    border-radius: 7px;
+    background: #1976d2;
+    color: white;
+    font-size: 17px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+button:active {
+    transform: scale(.98);
+}
+
+.ajuda {
+    text-align: center;
+    color: #666;
+    font-size: 13px;
+    margin: 10px auto;
+    max-width: 1000px;
+}
+
+#certificado {
+    position: relative;
+
+    width: 100%;
+    max-width: 1000px;
+
+    margin: 0 auto;
+
+    aspect-ratio: 1000 / 707;
+
+    background-image: url("certificado.jpg");
+    background-size: 100% 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    background-color: white;
+
+    overflow: hidden;
+
+    touch-action: pinch-zoom;
+}
+
+#identificacao {
+    position: absolute;
+
+    left: 50%;
+    top: 50%;
+
+    transform: translate(-50%, -50%);
+
+    font-weight: bold;
+
+    white-space: nowrap;
+
+    line-height: 1;
+
+    user-select: none;
+    -webkit-user-select: none;
+
+    cursor: grab;
+
+    /*
+      Permite pinça no navegador.
+    */
+    touch-action: pinch-zoom;
+}
+
+#identificacao:active {
+    cursor: grabbing;
+}
+
+#rodape {
+    position: absolute;
+
+    right: 2%;
+    bottom: 2%;
+
+    font-weight: bold;
+
+    white-space: nowrap;
+
+    text-align: right;
+
+    line-height: 1.1;
+
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+@media (max-width: 600px) {
+
+    body {
+        padding: 7px;
+    }
+
+    .painel {
+        padding: 11px;
+    }
+
+    h1 {
+        font-size: 20px;
+    }
+}
+
+</style>
+</head>
+
+
+<body>
+
+
+<h1>Gerador de Certificados</h1>
+
+
+<div class="painel">
+
+
+    <div class="campo">
+
+        <label for="nome">
+            Nome
+        </label>
+
+        <input
+            type="text"
+            id="nome"
+            placeholder="Digite o nome">
+
+    </div>
+
+
+    <div class="campo">
+
+        <label for="indicativo">
+            Indicativo
+        </label>
+
+        <input
+            type="text"
+            id="indicativo"
+            placeholder="Digite o indicativo">
+
+    </div>
+
+
+    <div class="campo">
+
+        <label for="cor">
+            Cor do texto
+        </label>
+
+        <input
+            type="color"
+            id="cor"
+            value="#000000">
+
+    </div>
+
+
+    <div class="campo">
+
+        <label for="tamanho">
+            Tamanho do texto
+        </label>
+
+        <input
+            type="number"
+            id="tamanho"
+            value="52"
+            min="10"
+            max="150">
+
+    </div>
+
+
+    <button onclick="baixarCertificado()">
+        Gerar certificado
+    </button>
+
+</div>
+
+
+<div class="ajuda">
+
+    Toque e arraste o texto para posicioná-lo.
+    <br>
+    Use dois dedos para aumentar ou diminuir a tela.
+
+</div>
+
+
+<div id="certificado">
+
+    <div id="identificacao"></div>
+
+    <div id="rodape"></div>
+
+</div>
+
+
+
+<script>
+
+
+/*
+==================================================
+VARIÁVEIS
+==================================================
+*/
+
+
+const certificado =
+    document.getElementById(
+        "certificado"
+    );
+
+
+const identificacao =
+    document.getElementById(
+        "identificacao"
+    );
+
+
+const rodape =
+    document.getElementById(
+        "rodape"
+    );
+
+
+const nomeInput =
+    document.getElementById(
+        "nome"
+    );
+
+
+const indicativoInput =
+    document.getElementById(
+        "indicativo"
+    );
+
+
+const corInput =
+    document.getElementById(
+        "cor"
+    );
+
+
+const tamanhoInput =
+    document.getElementById(
+        "tamanho"
+    );
+
+
+/*
+==================================================
+POSIÇÃO DO TEXTO
+==================================================
+
+Trabalhamos sempre dentro de uma área
+de 1000 x 707.
+
+Assim, mesmo que o celular mude de tamanho,
+a posição continua correta.
+*/
+
+
+let posicaoX = 500;
+
+let posicaoY = 353.5;
+
+
+/*
+==================================================
+CONTROLE DO ARRASTE
+==================================================
+*/
+
+
+let arrastando = false;
+
+let ponteiroAtivo = null;
+
+
+/*
+==================================================
+DATA AUTOMÁTICA
+==================================================
+*/
+
+
+function dataAtual() {
+
+    const hoje =
+        new Date();
+
+
+    const dia =
+        String(
+            hoje.getDate()
+        ).padStart(2, "0");
+
+
+    const mes =
+        String(
+            hoje.getMonth() + 1
+        ).padStart(2, "0");
+
+
+    const ano =
+        hoje.getFullYear();
+
+
+    return (
+        dia +
+        "/" +
+        mes +
+        "/" +
+        ano
+    );
+}
+
+
+/*
+==================================================
+ATUALIZAÇÃO DO CERTIFICADO
+==================================================
+*/
+
+
+function atualizar() {
+
+
+    /*
+      Indicativo sempre em maiúsculas.
+    */
+
+    indicativoInput.value =
+        indicativoInput.value.toUpperCase();
+
+
+    const nome =
+        nomeInput.value.trim();
+
+
+    const indicativo =
+        indicativoInput.value.trim();
+
+
+    const cor =
+        corInput.value;
+
+
+    const tamanho =
+        Number(
+            tamanhoInput.value
+        ) || 52;
+
+
+    /*
+      Cor
+    */
+
+    identificacao.style.color =
+        cor;
+
+
+    rodape.style.color =
+        cor;
+
+
+    /*
+      Tamanho responsivo
+    */
+
+    const largura =
+        certificado.clientWidth;
+
+
+    const escala =
+        largura / 1000;
+
+
+    identificacao.style.fontSize =
+        (tamanho * escala) +
+        "px";
+
+
+    /*
+    ==============================================
+    REGRA PRINCIPAL
+    ==============================================
+
+    Nome + indicativo:
+    indicativo é o texto grande.
+
+    Somente indicativo:
+    indicativo é o texto grande.
+
+    Somente nome:
+    nome é o texto grande.
+    */
+
+
+    if (indicativo) {
+
+        identificacao.textContent =
+            indicativo;
+
+    }
+
+    else if (nome) {
+
+        identificacao.textContent =
+            nome;
+
+    }
+
+    else {
+
+        identificacao.textContent =
+            "";
+
+    }
+
+
+    /*
+      RODAPÉ
+    */
+
+    if (nome && indicativo) {
+
+        rodape.textContent =
+            nome +
+            " — Emitido em " +
+            dataAtual();
+
+    }
+
+    else {
+
+        rodape.textContent =
+            "Emitido em " +
+            dataAtual();
+
+    }
+
+
+    posicionarTexto();
+
+}
+
+
+/*
+==================================================
+POSICIONAR TEXTO
+==================================================
+*/
+
+
+function posicionarTexto() {
+
+
+    const largura =
+        certificado.clientWidth;
+
+
+    const altura =
+        certificado.clientHeight;
+
+
+    const x =
+        (
+            posicaoX /
+            1000
+        ) *
+        largura;
+
+
+    const y =
+        (
+            posicaoY /
+            707
+        ) *
+        altura;
+
+
+    identificacao.style.left =
+        x + "px";
+
+
+    identificacao.style.top =
+        y + "px";
+
+}
+
+
+/*
+==================================================
+ARRASTAR TEXTO
+==================================================
+*/
+
+
+identificacao.addEventListener(
+    "pointerdown",
+    function(event) {
+
+
+        arrastando = true;
+
+
+        ponteiroAtivo =
+            event.pointerId;
+
+
+        try {
+
+            identificacao.setPointerCapture(
+                event.pointerId
+            );
+
+        } catch(e) {}
+
+
+        event.preventDefault();
+
+    }
+);
+
+
+identificacao.addEventListener(
+    "pointermove",
+    function(event) {
+
+
+        if (!arrastando) {
+            return;
+        }
+
+
+        if (
+            event.pointerId !==
+            ponteiroAtivo
+        ) {
+            return;
+        }
+
+
+        const rect =
+            certificado.getBoundingClientRect();
+
+
+        let x =
+            event.clientX -
+            rect.left;
+
+
+        let y =
+            event.clientY -
+            rect.top;
+
+
+        /*
+          Não deixa sair do certificado.
+        */
+
+        x =
+            Math.max(
+                0,
+                Math.min(
+                    rect.width,
+                    x
+                )
+            );
+
+
+        y =
+            Math.max(
+                0,
+                Math.min(
+                    rect.height,
+                    y
+                )
+            );
+
+
+        /*
+          Converte para 1000 x 707.
+        */
+
+        posicaoX =
+            (
+                x /
+                rect.width
+            ) *
+            1000;
+
+
+        posicaoY =
+            (
+                y /
+                rect.height
+            ) *
+            707;
+
+
+        posicionarTexto();
+
+    }
+);
+
+
+function finalizarArraste(event) {
+
+
+    if (
+        event.pointerId ===
+        ponteiroAtivo
+    ) {
+
+        arrastando = false;
+
+        ponteiroAtivo = null;
+
+    }
+
+}
+
+
+identificacao.addEventListener(
+    "pointerup",
+    finalizarArraste
+);
+
+
+identificacao.addEventListener(
+    "pointercancel",
+    finalizarArraste
+);
+
+
+/*
+==================================================
+CAMPOS
+==================================================
+*/
+
+
+nomeInput.addEventListener(
+    "input",
+    atualizar
+);
+
+
+indicativoInput.addEventListener(
+    "input",
+    atualizar
+);
+
+
+corInput.addEventListener(
+    "input",
+    atualizar
+);
+
+
+tamanhoInput.addEventListener(
+    "input",
+    atualizar
+);
+
+
+/*
+==================================================
+REDIMENSIONAMENTO
+==================================================
+*/
+
+
+window.addEventListener(
+    "resize",
+    function() {
+
+        atualizar();
+
+    }
+);
+
+
+/*
+==================================================
+GERAR CERTIFICADO
+==================================================
+*/
+
+
+function baixarCertificado() {
+
+
+    const nome =
+        nomeInput.value.trim();
+
+
+    const indicativo =
+        indicativoInput.value
+            .trim()
+            .toUpperCase();
+
+
+    const cor =
+        corInput.value;
+
+
+    const tamanho =
+        Number(
+            tamanhoInput.value
+        ) || 52;
+
+
+    /*
+      Cria a imagem final.
+    */
+
+    const canvas =
+        document.createElement(
+            "canvas"
+        );
+
+
+    canvas.width = 1000;
+
+    canvas.height = 707;
+
+
+    const ctx =
+        canvas.getContext(
+            "2d"
+        );
+
+
+    const fundo =
+        new Image();
+
+
+    fundo.onload =
+        function() {
+
+
+            /*
+              Fundo
+            */
+
+            ctx.drawImage(
+                fundo,
+                0,
+                0,
+                1000,
+                707
+            );
+
+
+            /*
+              Texto principal
+            */
+
+            ctx.fillStyle =
+                cor;
+
+
+            ctx.font =
+                "bold " +
+                tamanho +
+                "px Arial";
+
+
+            ctx.textAlign =
+                "center";
+
+
+            ctx.textBaseline =
+                "middle";
+
+
+            let textoPrincipal =
+                "";
+
+
+            if (indicativo) {
+
+                textoPrincipal =
+                    indicativo;
+
+            }
+
+            else if (nome) {
+
+                textoPrincipal =
+                    nome;
+
+            }
+
+
+            if (textoPrincipal) {
+
+                ctx.fillText(
+                    textoPrincipal,
+                    posicaoX,
+                    posicaoY
+                );
+
+            }
+
+
+            /*
+              Rodapé
+            */
+
+            ctx.textAlign =
+                "right";
+
+
+            ctx.textBaseline =
+                "bottom";
+
+
+            const textoRodape =
+                nome
+                    ? nome +
+                      " — Emitido em " +
+                      dataAtual()
+
+                    : "Emitido em " +
+                      dataAtual();
+
+
+            const tamanhoRodape =
+                Math.max(
+                    14,
+                    tamanho * 0.28
+                );
+
+
+            ctx.font =
+                "bold " +
+                tamanhoRodape +
+                "px Arial";
+
+
+            ctx.fillText(
+                textoRodape,
+                980,
+                687
+            );
+
+
+            /*
+              Download
+            */
+
+            const link =
+                document.createElement(
+                    "a"
+                );
+
+
+            link.download =
+                "certificado.png";
+
+
+            link.href =
+                canvas.toDataURL(
+                    "image/png"
+                );
+
+
+            link.click();
+
+        };
+
+
+    /*
+      Busca certificado.jpg
+      que estará no mesmo
+      repositório.
+    */
+
+    fundo.src =
+        "certificado.jpg";
+
+}
+
+
+/*
+==================================================
+INICIALIZAÇÃO
+==================================================
+*/
+
+
+atualizar();
+
+
+</script>
+
+</body>
+</html>
